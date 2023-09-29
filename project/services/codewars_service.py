@@ -2,11 +2,10 @@ import requests
 from urllib.parse import quote
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException, WebDriverException
 
 class CodewarsService:
-    def __init__(self, user='Weston Sandfort', page='0'):
+    def __init__(self, user='', page='0'):
         self.user = user
         self.page = page
 
