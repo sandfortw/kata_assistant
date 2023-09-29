@@ -11,7 +11,7 @@ class CodewarsService:
         self.page = page
 
     def get_completed_challenges(self):
-        """Retrieve completed challenges from CodeWars API."""
+        """Retrieve completed challenges from CodeWars API. Returns an object."""
         url = f'http://www.codewars.com/api/v1/users/{quote(self.user)}/code-challenges/completed?page={self.page}'
         
         response = requests.get(url)
@@ -22,6 +22,9 @@ class CodewarsService:
             raise Exception(f"Error fetching challenge. Status code: {response.status_code}")
 
     def get_challenge_info(self, challenge_url):
+        """
+        Uses chrome webdriver and beautiful soup to parse html and return code.
+        """
         try:
             driver = webdriver.Chrome() 
             driver.get(challenge_url) 
