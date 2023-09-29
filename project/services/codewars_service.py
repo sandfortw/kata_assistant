@@ -21,7 +21,7 @@ class CodewarsService:
         else:
             raise Exception(f"Error fetching challenge. Status code: {response.status_code}")
 
-    def get_challenge_info(challenge_url):
+    def get_challenge_info(self, challenge_url):
         try:
             driver = webdriver.Chrome() 
             driver.get(challenge_url) 
