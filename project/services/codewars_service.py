@@ -36,15 +36,19 @@ class CodewarsService:
 
         if response is not None:
             soup = BeautifulSoup(response, 'html.parser')
-
             code_elements = soup.find_all('div', class_='CodeMirror-code')
 
             python_code = "\n".join(element.text.strip()
                                     for element in code_elements)
+            url = f'https://www.codewars.com/api/v1/code-challenges/{challenge_url.split("/")[-3]}'
 
-            return python_code.strip()
+            challenge_info = requests.get(url).json()
+            challenge_info['code'] = python_code.strip()
+            return challenge_info
 
         else:
             print(
                 f"Error fetching challenge. Status code: {response.status_code}")
             return None
+
+CodewarsService().get_challenge_info("https://www.codewars.com/kata/520446778469526ec0000001/train/python")

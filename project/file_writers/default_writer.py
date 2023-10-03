@@ -1,6 +1,6 @@
-import os
-from os.path import join
 from project.services.codewars_service import CodewarsService
+import os
+from re import sub
 
 
 class DefaultWriter:
@@ -8,8 +8,17 @@ class DefaultWriter:
         self.url = url
         self.location = location
 
-    def __determine_language(url):
-        parts = url.split("/")
+    def write_file(self):
+        folder_path = os.path.join(self.location, 'codewars_katas')
+        os.makedirs(folder_path, exist_ok=True)
+        data = CodewarsService().get_challenge_info(challenge_url = self.url)
+        snake_cased_challenge_name = self.__snake_case(data['name'])
+        file = open(f"{folder_path}/{snake_cased_challenge_name}{self.__determine_language()['extension']}", "w")
+        file.write(data['code'])
+        print(f"hello{self.__determine_language()['extension']} created at {folder_path}") 
+
+    def __determine_language(self):
+        parts = self.url.split("/")
         language = parts[-1]
         language_file_extensions = {
             'c': '.c',
@@ -104,7 +113,7 @@ class DefaultWriter:
             'agda': '--',
             'bf': '',  # Brainfuck has no one-line comments
             'cfml': '//',
-            'cobol': '*',  
+            'cobol': '*',
             'commonlisp': ';;',
             'd': '//',
             'elm': '--',
@@ -137,3 +146,9 @@ class DefaultWriter:
             'extension': language_file_extensions[language],
             'comment_char': language_comment_characters[language],
         }
+    
+    def __snake_case(self, s):
+        return '_'.join(
+            sub('([A-Z][a-z]+)', r' \1',
+            sub('([A-Z]+)', r' \1',
+            s.replace('-', ' '))).split()).lower()
