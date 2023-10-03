@@ -7,7 +7,7 @@ def test_get_challenge_info():
     Proves that getting challenge info returns a string, and that it contains at least the substring 'def'.
     """
     challenge_url = 'https://www.codewars.com/kata/520446778469526ec0000001/train/python'
-    python_code = CodewarsService().get_challenge_info(challenge_url)
+    python_code = CodewarsService().get_challenge_info(challenge_url)['code']
     assert python_code is not None
     assert isinstance(python_code, str)
     assert 'def' in python_code
