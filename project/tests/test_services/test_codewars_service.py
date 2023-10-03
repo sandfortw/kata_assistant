@@ -1,7 +1,8 @@
 from project.services.codewars_service import CodewarsService
 from random import choice
+import pytest
 
-
+@pytest.mark.vcr
 def test_get_challenge_info():
     """
     Proves that getting challenge info returns a string, and that it contains at least the substring 'def'.
@@ -12,7 +13,7 @@ def test_get_challenge_info():
     assert isinstance(python_code, str)
     assert 'def' in python_code
 
-
+@pytest.mark.vcr
 def test_get_completed_challenges():
     """
     Proves that get_completed_challenges returns an object with challenge data.

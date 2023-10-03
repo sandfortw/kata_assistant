@@ -50,5 +50,3 @@ class CodewarsService:
             print(
                 f"Error fetching challenge. Status code: {response.status_code}")
             return None
-
-CodewarsService().get_challenge_info("https://www.codewars.com/kata/520446778469526ec0000001/train/python")
