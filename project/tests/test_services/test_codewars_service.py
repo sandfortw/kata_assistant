@@ -13,17 +13,17 @@ def test_get_challenge_info():
     assert isinstance(python_code, str)
     assert 'def' in python_code
 
-@pytest.mark.vcr
-def test_get_completed_challenges():
-    """
-    Proves that get_completed_challenges returns an object with challenge data.
-    """
-    json = CodewarsService(
-        user='Weston Sandfort',
-        page='0').get_completed_challenges()
-    assert json is not None
-    assert isinstance(json, dict)
-    assert isinstance(json['data'], list)
-    assert isinstance(choice(json['data']), dict)
-    assert isinstance(choice(json['data'])['name'], str)
-    assert isinstance(choice(json['data'])['id'], str)
+# @pytest.mark.vcr
+# def test_get_completed_challenges():
+#     """
+#     Proves that get_completed_challenges returns an object with challenge data.
+#     """
+#     json = CodewarsService(
+#         user='Weston Sandfort',
+#         page='0').get_completed_challenges()
+#     assert json is not None
+#     assert isinstance(json, dict)
+#     assert isinstance(json['data'], list)
+#     assert isinstance(choice(json['data']), dict)
+#     assert isinstance(choice(json['data'])['name'], str)
+#     assert isinstance(choice(json['data'])['id'], str)

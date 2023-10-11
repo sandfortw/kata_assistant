@@ -10,17 +10,17 @@ class CodewarsService:
         self.user = user
         self.page = page
 
-    def get_completed_challenges(self):
-        """Retrieve completed challenges from CodeWars API. Returns an object."""
-        url = f'http://www.codewars.com/api/v1/users/{quote(self.user)}/code-challenges/completed?page={self.page}'
+    # def get_completed_challenges(self):
+    #     """Retrieve completed challenges from CodeWars API. Returns an object."""
+    #     url = f'http://www.codewars.com/api/v1/users/{quote(self.user)}/code-challenges/completed?page={self.page}'
 
-        response = requests.get(url)
+    #     response = requests.get(url)
 
-        if response.status_code == 200:
-            return response.json()
-        else:
-            raise Exception(
-                f"Error fetching challenge. Status code: {response.status_code}")
+    #     if response.status_code == 200:
+    #         return response.json()
+    #     else:
+    #         raise Exception(
+    #             f"Error fetching challenge. Status code: {response.status_code}")
 
     def get_challenge_info(self, challenge_url):
         """
