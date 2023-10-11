@@ -15,7 +15,7 @@ class DefaultWriter:
         snake_cased_challenge_name = self.__snake_case(data['name'])
         file = open(f"{folder_path}/{snake_cased_challenge_name}{self.__determine_language()['extension']}", "w")
         file.write(data['code'])
-        print(f"hello{self.__determine_language()['extension']} created at {folder_path}") 
+        print(f"{snake_cased_challenge_name}{self.__determine_language()['extension']} created at {folder_path}") 
 
     def __determine_language(self):
         parts = self.url.split("/")

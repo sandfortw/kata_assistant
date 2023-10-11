@@ -48,5 +48,5 @@ class CodewarsService:
 
         else:
             print(
-                f"Error fetching challenge. Status code: {response.status_code}")
+                f"Error fetching challenge.")
             return None
