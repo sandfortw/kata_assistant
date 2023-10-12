@@ -13,6 +13,7 @@ def test_get_challenge_info():
     assert isinstance(python_code, str)
     assert 'def' in python_code
 
+#Comment the following back in, if this feature ever gets implemented:
 # @pytest.mark.vcr
 # def test_get_completed_challenges():
 #     """

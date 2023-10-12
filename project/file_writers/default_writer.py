@@ -12,10 +12,28 @@ class DefaultWriter:
         folder_path = os.path.join(self.location, 'codewars_katas')
         os.makedirs(folder_path, exist_ok=True)
         data = CodewarsService().get_challenge_info(challenge_url = self.url)
+        '''
+        Test URLs:
+        
+        Python:
+        https://www.codewars.com/kata/520446778469526ec0000001/train/python
+         
+        Ruby:
+        https://www.codewars.com/kata/5518a860a73e708c0a000027/train/ruby
+        '''
+        code = self.__codify(data['code'])
         snake_cased_challenge_name = self.__snake_case(data['name'])
         file = open(f"{folder_path}/{snake_cased_challenge_name}{self.__determine_language()['extension']}", "w")
-        file.write(data['code'])
+        file.write(f'{self.__determine_language()["comment_char"]}CODE: \n')
+        file.write(code['challenge_code'] + '\n')
+        file.write(f'\n{self.__determine_language()["comment_char"]}TEST:\n')
+        file.write(code['test_code'])
         print(f"{snake_cased_challenge_name}{self.__determine_language()['extension']} created at {folder_path}") 
+
+    def __codify(self, code_data):
+        return code_data
+
+
 
     def __determine_language(self):
         parts = self.url.split("/")
