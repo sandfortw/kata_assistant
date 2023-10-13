@@ -4,12 +4,11 @@ from re import sub
 
 
 class DefaultWriter:
-    def __init__(self, url='', location=os.path.expanduser("~/Desktop")):
+    def __init__(self, url=''):
         self.url = url
-        self.location = location
 
     def write_file(self):
-        folder_path = os.path.join(self.location, 'codewars_katas')
+        folder_path = os.path.join(os.path.dirname(os.getcwd()), 'codewars_katas')
         os.makedirs(folder_path, exist_ok=True)
         data = CodewarsService().get_challenge_info(challenge_url = self.url)
         '''
