@@ -8,7 +8,7 @@ class DefaultWriter:
         self.url = url
 
     def write_file(self):
-        folder_path = os.path.join(os.path.dirname(os.getcwd()), 'codewars_katas')
+        folder_path = os.path.join(os.getcwd(), 'codewars_katas')
         os.makedirs(folder_path, exist_ok=True)
         data = CodewarsService().get_challenge_info(challenge_url = self.url)
         '''
@@ -20,19 +20,35 @@ class DefaultWriter:
         Ruby:
         https://www.codewars.com/kata/5518a860a73e708c0a000027/train/ruby
         '''
-        code = self.__codify(data['code'])
+        language_data = self.__determine_language()
+        code = self.__codify(data['code'], language_data)
         snake_cased_challenge_name = self.__snake_case(data['name'])
         file = open(f"{folder_path}/{snake_cased_challenge_name}{self.__determine_language()['extension']}", "w")
-        file.write(f'{self.__determine_language()["import_statment"]} \n\n')
-        file.write(f'{self.__determine_language()["comment_char"]}CODE: \n')
+        file.write(f'{language_data["import_statment"]} \n\n')
+        file.write(f'{language_data["comment_char"]}CODE: \n')
         file.write(code['challenge_code'] + '\n')
-        file.write(f'\n{self.__determine_language()["comment_char"]}TEST:\n')
+        file.write(f'\n{language_data["comment_char"]}TEST:\n')
         file.write(code['test_code'])
-        print(f"{snake_cased_challenge_name}{self.__determine_language()['extension']} created at {folder_path}") 
+        print(f"{snake_cased_challenge_name}{language_data['extension']} created at {folder_path}") 
 
-    def __codify(self, code_data):
+    def __codify(self, code_data, language_data):
+        language = language_data['language']
+        comment_char = language_data['comment_char']
+        match language: 
+            case 'python':
+                """
+                    Comment out the first 2 lines of the test code,
+                    which in most cases will allow the tests to run 
+                    without futher modification. 
+                """
+                data_array = code_data['test_code'].split('\n')
+                for x in (0,1):
+                    data_array[x] = comment_char + data_array[x]
+                test_code = "\n".join(data_array)
+                code_data['test_code'] = test_code
+            case _:
+                pass
         return code_data
-
 
 
     def __determine_language(self):
@@ -158,68 +174,70 @@ class DefaultWriter:
             'solidity': '//',
             'vb.net': "'"
         }
+
         import_statements = {
-            'c': '#include "../KATA_ASSISTANT/project/frameworks/c/cw-2"',
-            'c#': 'using KATA_ASSISTANT.project.frameworks.csharp.cw_2;',
-            'c++': '#include "../KATA_ASSISTANT/project/frameworks/cpp/cw-2"',
-            'clojure': ';require [KATA_ASSISTANT.project.frameworks.clojure.cw-2 :as cw-2]',
-            'coffeescript': 'cw_2 = require "../KATA_ASSISTANT/project/frameworks/coffeescript/cw-2.coffee"',
-            'coq': 'Require Import KATA_ASSISTANT.project.frameworks.coq.cw_2.',
-            'crystal': 'require "../KATA_ASSISTANT/project/frameworks/crystal/cw-2"',
-            'dart': 'import "package:KATA_ASSISTANT/project/frameworks/dart/cw_2.dart"',
-            'elixir': 'alias KATA_ASSISTANT.project.frameworks.elixir.cw_2, as: cw_2',
-            'f#': 'open KATA_ASSISTANT.project.frameworks.fsharp.cw_2',
-            'go': 'import "KATA_ASSISTANT/project/frameworks/go/cw-2"',
-            'groovy': 'import KATA_ASSISTANT.project.frameworks.groovy.cw_2',
-            'haskell': 'import KATA_ASSISTANT.project.frameworks.haskell.cw_2',
-            'java': 'import KATA_ASSISTANT.project.frameworks.java.cw_2.*',
-            'javascript': 'const cw_2 = require("../KATA_ASSISTANT/project/frameworks/javascript/cw-2.js");',
-            'kotlin': 'import KATA_ASSISTANT.project.frameworks.kotlin.cw_2.*',
-            'lean': 'import KATA_ASSISTANT.project.frameworks.lean.cw_2',
-            'lua': 'require "KATA_ASSISTANT.project.frameworks.lua.cw-2"',
-            'nasm': 'include KATA_ASSISTANT.project.frameworks.nasm.cw-2',
-            'php': 'include "../KATA_ASSISTANT/project/frameworks/php/cw-2.php"',
-            'python': 'from KATA_ASSISTANT.project.frameworks.python3.cw_2 import *',
-            'racket': '(require KATA_ASSISTANT.project.frameworks.racket.cw-2)',
-            'ruby': 'require_relative "../KATA_ASSISTANT/project/frameworks/ruby/cw-2"',
-            'rust': 'extern crate KATA_ASSISTANT.project.frameworks.rust.cw_2;',
-            'scala': 'import KATA_ASSISTANT.project.frameworks.scala.cw_2._',
-            'shell': 'source KATA_ASSISTANT/project/frameworks/shell/cw-2.sh',
-            'sql': 'USE KATA_ASSISTANT.project.frameworks.sql.cw_2;',
-            'swift': 'import KATA_ASSISTANT.project.frameworks.swift.cw_2',
-            'typescript': 'import * as cw_2 from "../KATA_ASSISTANT/project/frameworks/typescript/cw-2";',
-            'agda': 'import KATA_ASSISTANT.project.frameworks.agda.cw-2',
-            'bf': 'require "../KATA_ASSISTANT/project/frameworks/bf/cw-2.bf"',
-            'cfml': '<cfimport prefix="cw_2" from="../KATA_ASSISTANT/project/frameworks/cfml/cw-2.cfm">',
-            'cobol': 'COPY KATA_ASSISTANT.project.frameworks.cobol.cw-2',
-            'commonlisp': '(require KATA_ASSISTANT.project.frameworks.commonlisp.cw-2)',
-            'd': 'import KATA_ASSISTANT.project.frameworks.d.cw_2;',
-            'elm': 'import KATA_ASSISTANT.project.frameworks.elm.cw_2 exposing (..)',
-            'erlang': '-import(KATA_ASSISTANT.project.frameworks.erlang.cw_2, [function/arity])',
-            'factor': 'USING: KATA_ASSISTANT.project.frameworks.factor.cw-2 ;',
-            'forth': 'INCLUDE KATA_ASSISTANT.project.frameworks.forth.cw-2',
-            'fortran': 'INCLUDE KATA_ASSISTANT.project.frameworks.fortran.cw-2',
-            'haxe': 'import KATA_ASSISTANT.project.frameworks.haxe.cw_2;',
-            'idris': 'import KATA_ASSISTANT.project.frameworks.idris.cw_2',
-            'julia': 'import KATA_ASSISTANT.project.frameworks.julia.cw_2',
+            #Functional:
+            'javascript': 'require("../project/frameworks/javascript/cw-2.js");',
+            'python': 'import codewars_test as test',
+            'ruby': 'require_relative "../project/frameworks/ruby/cw-2"',
+            #Not yet tested:
+            'c': '#include "../project/frameworks/c/cw-2"',
+            'c#': 'using project.frameworks.csharp.cw_2;',
+            'c++': '#include "../project/frameworks/cpp/cw-2"',
+            'clojure': ';require [project.frameworks.clojure.cw-2 :as cw-2]',
+            'coffeescript': 'cw_2 = require "../project/frameworks/coffeescript/cw-2.coffee"',
+            'coq': 'Require Import project.frameworks.coq.cw-2.',
+            'crystal': 'require "../project/frameworks/crystal/cw-2"',
+            'dart': 'import "package:project/frameworks/dart/cw_2.dart"',
+            'elixir': 'alias project.frameworks.elixir.cw-2, as: cw_2',
+            'f#': 'open project.frameworks.fsharp.cw-2',
+            'go': 'import "project/frameworks/go/cw-2"',
+            'groovy': 'import project.frameworks.groovy.cw-2',
+            'haskell': 'import project.frameworks.haskell.cw-2',
+            'java': 'import project.frameworks.java.cw-2.*',
+            'kotlin': 'import project.frameworks.kotlin.cw-2.*',
+            'lean': 'import project.frameworks.lean.cw-2',
+            'lua': 'require "project/frameworks/lua/cw-2"',
+            'nasm': 'include project.frameworks.nasm.cw-2',
+            'php': 'include "../project/frameworks/php/cw-2.php"',
+            'racket': '(require project.frameworks.racket.cw-2)',
+            'rust': 'extern crate project.frameworks.rust.cw_2;',
+            'scala': 'import project.frameworks.scala.cw_2._',
+            'shell': 'source project/frameworks/shell/cw-2.sh',
+            'sql': 'USE project.frameworks.sql.cw-2;',
+            'swift': 'import project.frameworks.swift.cw-2',
+            'typescript': 'import * as cw_2 from "../project/frameworks/typescript/cw-2";',
+            'agda': 'import project.frameworks.agda.cw-2',
+            'bf': 'require "../project/frameworks/bf/cw-2.bf"',
+            'cfml': '<cfimport prefix="cw_2" from="../project/frameworks/cfml/cw-2.cfm">',
+            'cobol': 'COPY project.frameworks.cobol.cw-2',
+            'commonlisp': '(require project.frameworks.commonlisp.cw-2)',
+            'd': 'import project.frameworks.d.cw_2;',
+            'elm': 'import project.frameworks.elm.cw_2 exposing (..)',
+            'erlang': '-import(project.frameworks.erlang.cw_2, [function/arity])',
+            'factor': 'USING: project.frameworks.factor.cw-2 ;',
+            'forth': 'INCLUDE project.frameworks.forth.cw-2',
+            'fortran': 'INCLUDE project.frameworks.fortran.cw-2',
+            'haxe': 'import project.frameworks.haxe.cw_2;',
+            'idris': 'import project.frameworks.idris.cw_2',
+            'julia': 'import project.frameworks.julia.cw_2',
             'lambda calculus': '',
-            'nim': 'import KATA_ASSISTANT.project.frameworks.nim.cw_2',
-            'objective-c': '#import "KATA_ASSISTANT/project/frameworks/objective-c/cw-2.h"',
-            'ocaml': 'open KATA_ASSISTANT.project.frameworks.ocaml.cw_2',
-            'pascal': 'uses KATA_ASSISTANT.project.frameworks.pascal.cw-2;',
-            'perl': 'use KATA_ASSISTANT.project.frameworks.perl.cw_2;',
-            'powershell': 'Import-Module KATA_ASSISTANT.project.frameworks.powershell.cw-2',
-            'prolog': 'consult("KATA_ASSISTANT/project/frameworks/prolog/cw-2.pl").',
-            'purescript': 'import KATA_ASSISTANT.project.frameworks.purescript.cw_2',
-            'r': 'source("KATA_ASSISTANT/project/frameworks/R/cw-2.R")',
-            'raku': 'use KATA_ASSISTANT.project.frameworks.raku.cw-2;',
-            'reason': 'open KATA_ASSISTANT.project.frameworks.reason.cw_2;',
-            'risc-v': 'import KATA_ASSISTANT.project.frameworks.riscv.cw_2',
-            'solidity': 'import * as cw_2 from "../KATA_ASSISTANT/project/frameworks/solidity/cw-2";',
-            'vb.net': 'Imports KATA_ASSISTANT.project.frameworks.vbnet.cw_2'
+            'nim': 'import project.frameworks.nim.cw-2',
+            'objective-c': '#import "project/frameworks/objective-c/cw-2.h"',
+            'ocaml': 'open project.frameworks.ocaml.cw-2',
+            'pascal': 'uses project.frameworks.pascal.cw-2;',
+            'perl': 'use project.frameworks.perl.cw-2;',
+            'powershell': 'Import-Module project.frameworks.powershell.cw-2',
+            'prolog': 'consult("project/frameworks/prolog/cw-2.pl").',
+            'purescript': 'import project.frameworks.purescript.cw-2',
+            'r': 'source("project/frameworks/R/cw-2.R")',
+            'raku': 'use project.frameworks.raku.cw-2;',
+            'reason': 'open project.frameworks.reason.cw-2;',
+            'risc-v': 'import project.frameworks.riscv.cw-2',
+            'solidity': 'import * as cw_2 from "../project/frameworks/solidity/cw-2";',
+            'vb.net': 'Imports project.frameworks.vbnet.cw-2'
         }
-
-
+        
         return {
             'language': language,
             'extension': language_file_extensions[language],
