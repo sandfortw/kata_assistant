@@ -3,4 +3,6 @@ kata_env/
 codewars_katas
 node_modules
 package-lock.json
+project/tests/test_file_writers/cassettes
+project/tests/test_services/cassettes
 

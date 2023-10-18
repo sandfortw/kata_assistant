@@ -21,6 +21,9 @@ class DefaultWriter:
         https://www.codewars.com/kata/5518a860a73e708c0a000027/train/ruby
         '''
         language_data = self.__determine_language()
+        print(data)
+
+        print(language_data)
         code = self.__codify(data['code'], language_data)
         snake_cased_challenge_name = self.__snake_case(data['name'])
         file = open(f"{folder_path}/{snake_cased_challenge_name}{self.__determine_language()['extension']}", "w")
@@ -237,7 +240,7 @@ class DefaultWriter:
             'solidity': 'import * as cw_2 from "../project/frameworks/solidity/cw-2";',
             'vb.net': 'Imports project.frameworks.vbnet.cw-2'
         }
-        
+
         return {
             'language': language,
             'extension': language_file_extensions[language],
