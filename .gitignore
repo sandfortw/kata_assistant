@@ -1,2 +1,6 @@
 __pycache__/
-kata_venv/
+kata_env/
+codewars_katas
+node_modules
+package-lock.json
+
