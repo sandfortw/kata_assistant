@@ -1,4 +1,4 @@
-This script scrapes a codewars url and creates a useful file for working on your codewars challenge in VScode.
+This script scrapes a codewars url and creates a useful file for working on your codewars challenge in VScode. This was an avenue for me to learn about python. 
 
 After cloning down this file, run
 `pip install -r requirements. txt`
