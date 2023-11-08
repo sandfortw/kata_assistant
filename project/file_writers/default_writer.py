@@ -10,29 +10,20 @@ class DefaultWriter:
     def write_file(self):
         folder_path = os.path.join(os.getcwd(), 'codewars_katas')
         os.makedirs(folder_path, exist_ok=True)
-        data = CodewarsService().get_challenge_info(challenge_url = self.url)
-        '''
-        Test URLs:
-        
-        Python:
-        https://www.codewars.com/kata/520446778469526ec0000001/train/python
-         
-        Ruby:
-        https://www.codewars.com/kata/5518a860a73e708c0a000027/train/ruby
-        '''
-        language_data = self.__determine_language()
-        print(data)
-
-        print(language_data)
-        code = self.__codify(data['code'], language_data)
-        snake_cased_challenge_name = self.__snake_case(data['name'])
-        file = open(f"{folder_path}/{snake_cased_challenge_name}{self.__determine_language()['extension']}", "w")
-        file.write(f'{language_data["import_statment"]} \n\n')
-        file.write(f'{language_data["comment_char"]}CODE: \n')
-        file.write(code['challenge_code'] + '\n')
-        file.write(f'\n{language_data["comment_char"]}TEST:\n')
-        file.write(code['test_code'])
-        print(f"{snake_cased_challenge_name}{language_data['extension']} created at {folder_path}") 
+        try: 
+            data = CodewarsService().get_challenge_info(challenge_url = self.url)
+            language_data = self.__determine_language()
+            code = self.__codify(data['code'], language_data)
+            snake_cased_challenge_name = self.__snake_case(data['name'])
+            file = open(f"{folder_path}/{snake_cased_challenge_name}{self.__determine_language()['extension']}", "w")
+            file.write(f'{language_data["import_statment"]} \n\n')
+            file.write(f'{language_data["comment_char"]}CODE: \n')
+            file.write(code['challenge_code'] + '\n')
+            file.write(f'\n{language_data["comment_char"]}TEST:\n')
+            file.write(code['test_code'])
+            print(f"Challenge {snake_cased_challenge_name}{self.__determine_language()['extension']} was written at {folder_path}")
+        except: 
+            print("An exception occurred, check your url for typos.") 
 
     def __codify(self, code_data, language_data):
         language = language_data['language']
