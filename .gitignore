@@ -1,5 +1,5 @@
 __pycache__/
-kata_env/
+env/
 codewars_katas
 node_modules
 package-lock.json
